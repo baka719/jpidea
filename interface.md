@@ -2,39 +2,39 @@
 
 ## Updates
 
-### Marks
+- Marks
 
-- **M** Modify
+	- **M** Modify
 
-- **N** New
+	- **N** New
 
-### 170814
+- 170814 [Link](https://719daze.me/JP_Thinktank/170814.html)
 
-[Link](https://719daze.me/JP_Thinktank/170814.html)
+- 170831 [Link](https://719daze.me/JP_Thinktank/170831.html)
 
-### 170831
+	- **M** Mail Check
 
-[Link](https://719daze.me/JP_Thinktank/170831.html)
+	- **M** File Upload
 
-- **M** Mail Check
+	- **M** Search Document
 
-- **M** File Upload
+	- **N** Major Search
 
-- **M** Search Document
+	- **N** Course Search
 
-- **N** Major Search
+	- **N** File Modify
 
-- **N** Course Search
+	- **N** User info modify
 
-- **N** File Modify
+- 170901 [Link](https://719daze.me/JP_Thinktank/170901.html)
 
-- **N** User info modify
+	- **N** Get College List
 
-### 170901
+- 170903 [Link](https://719daze.me/JP_Thinktank/170903.html)
 
-[Link](https://719daze.me/JP_Thinktank/170901.html)
+	- **N** File Download
 
-- **N** Get College List
+	- **N** User Logout
 
 ## Global
 ```
@@ -456,5 +456,44 @@ responce
 			"xname" : "" ,
 		}
 	]
+}
+```
+
+#### File Download
+`Update 170903`
+
+url : `/filedl/${fid}`
+
+method : `GET`
+
+request `{}`
+
+responce
+```
+{
+	"status" : 200 ,
+	"message" : "OK" ,
+	"data" :
+	{
+		"path" : "" ,
+	}
+}
+```
+
+#### User Logout
+`Update 170903`
+
+url : `/logout/${uid}`
+
+method : `POST`
+
+request `{}`
+
+responce
+```
+{
+	"status" : 200 ,
+	"message" : "OK" ,
+	"data" :{}
 }
 ```
