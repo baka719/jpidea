@@ -483,7 +483,7 @@ responce
 #### User Logout
 `Update 170903`
 
-url : `/logout/${uid}`
+url : `/logout`
 
 method : `POST`
 
