@@ -34,6 +34,12 @@
 
 	- **N** Get College List
 
+- 170903 [Link](https://719daze.me/JP_Thinktank/170903.html)
+ 
+ 	- **N** File Download
+
+ 	- **N** User Logout
+
 - 170910 [Link](https://719daze.me/JP_Thinktank/170910.html)
 
 	- **M** Search Document
@@ -53,6 +59,14 @@
 	- **N** Delete Document
 
 	- **O** Add notes
+
+- 170911 [Link](https://719daze.me/JP_Thinktank/170911.html)
+
+	- **M** Get Download List
+
+	- **M** Get Upload List
+
+	- **O** Recover 170903
 
 ## Global
 ```
@@ -261,9 +275,9 @@ url : `/document/search`
 
 method : `GET`
 
-request 							//Update 170831
+request 
 ```
-{
+{									//Update 170831
 	"method" : 0 , 					//1:course 2:major
 	"course" : 1 , 					//cid
 	"college" : 1 , 				//xid
@@ -558,6 +572,50 @@ responce
 }
 ```
 
+#### File Download
+
+> 发起下载请求时由后台返回url地址
+
+`Update 170903`
+
+url : `/filedl/${fid}`
+
+method : `GET`
+
+request `{}`
+
+responce
+{
+	"status" : 200 ,
+	"message" : "OK" ,
+	"data" :
+	{
+		"path" : "",
+	}
+}
+
+#### User Logout
+
+> 用户退出登录操作
+
+`Update 170903`
+
+url : `/logout`
+
+method : `POST`
+
+request `{}`
+
+responce
+```
+{
+	"status" : 200 ,
+	"message" : "OK" ,
+	"data" : {}
+}
+
+```
+
 #### Get Download List
 
 > 用户个人页中使用 显示用户所有曾经下载过的文件
@@ -576,6 +634,7 @@ request
 ```
 {
 	"username" : "" ,
+	"page" : "" ,					//Update 170911
 }
 ```
 
@@ -621,6 +680,7 @@ request
 ```
 {
 	"username" : "" ,
+	"page" : "" ,					//Update 170911
 }
 ```
 
