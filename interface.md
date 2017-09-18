@@ -68,6 +68,18 @@
 
 	- **O** Recover 170903
 
+- 170914 [Link](https://719daze.me/JP_Thinktank/170914.html)
+
+	- **N** Get User Info
+
+	- **N** Get User List
+
+	- **N** Get File List
+
+	- **N** Get User Log
+
+	- **N** Get File Log
+
 ## Global
 ```
 {
@@ -585,6 +597,7 @@ method : `GET`
 request `{}`
 
 responce
+```
 {
 	"status" : 200 ,
 	"message" : "OK" ,
@@ -593,6 +606,7 @@ responce
 		"path" : "",
 	}
 }
+```
 
 #### User Logout
 
@@ -737,3 +751,345 @@ responce :
 	"data" : {}
 }
 ```
+
+#### Get User Info
+
+> 索求用户名 发送用户详细信息
+
+`Update 170914`
+
+url : `userinfo\$username`
+
+method : `GET`
+
+request :
+```
+{
+	"page" : 1 ,
+}
+```
+
+responce : 
+```
+{
+	"status" : 200 ,
+	"message" : "OK" ,
+	"data" : 
+	[
+		{
+			"uid" : 1 ,
+			"username" : "" ,
+			"nickname" : "" ,
+			"avator" : "" ,
+			"sign" : "" ,
+			"coin" : 0 ,
+			"mail" : "" ,
+			"phone" : "" ,
+			"qq" : "" ,
+			"xname" : "" ,
+			"mname" : "" ,
+			"auth" : "" ,
+			"status" : "" ,
+			"uploadcount" : 0 ,
+			"downloadcount" : 0 ,
+			"collectcount" : 0 ,
+		}
+	]
+}
+```
+
+#### Get User List
+
+> 后台视图用于用户详细信息 列表形式显示
+
+> 对于前端，提供一定的查询条件 不需要的条件置空
+
+> 全空为列举所有用户信息
+
+> 后端提供符合查询条件的用户的全部所需信息
+
+`Update 170915`
+
+url : `admin\user\list`
+
+method : `GET`
+
+request :
+```
+{
+	"username" : "" ,				//用户名
+	"nickname" : "" ,				//昵称 后台需支持模糊查询
+	"xid" : 0 ,						//所属学院
+	"mid" : 0 ,						//所属专业
+	"status" : -1 ,					//状态
+	"low_upcnt" : 0 ,				//上传数 不少于的数值 eg.查上传数为4~7个的用户 "low_upcnt" = 4 包含边界4
+	"top_upcnt" : 0 ,				//上传数 不多于的数值 eg.查上传数为4~7个的用户 "top_upcnt" = 7 包含边界7
+	"low_downcnt" : 0 ,				//下载数
+	"top_downcnt" : 0 ,
+	"low_collectcnt" : 0 ,			//收藏数
+	"top_collectcnt" : 0 ,
+	"low_registtime" : 0 ,			//注册时间 不早于的数值
+	"top_registtime" : 0 ,			//注册时间 不晚于的数值
+	"low_lastlogintime" : 0 ,		//最后登录时间 不早于的数值
+	"top_lastlogintime" : 0 ,		//最后登录时间 不晚于的数值
+
+	"page" : 1 ,					//页码
+	"res_per_page" : 20 ,			//每页结果数 提供10 20 50 100四个选项
+	"sort_method" : "" ,			//排序依据 一个单词(见下)
+	"sort_ref" : 1					//输出顺序 字符为按照字典序 1升序(1 2 3) 2降序(3 2 1)
+
+}
+```
+
+> 排序依据
+
+> uid&emsp;&emsp;username&emsp;&emsp;nickname&emsp;&emsp;coin&emsp;&emsp;mid(实际为xid与mid双关键字排序)
+
+> unlocktime&emsp;&emsp;mailtime&emsp;&emsp;upcnt&emsp;&emsp;downcnt&emsp;&emsp;collecttime
+
+> registtime&emsp;&emsp;lastlogintime
+
+responce : 
+```
+{
+	"status" : 200 ,
+	"message" : "OK" ,
+	"data" : 
+	{
+		"rescount" : 0 ,			//总结果数
+		[
+			{
+				"uid" : 0 ,
+				"username" : "" ,
+				"nickname" : "" ,
+				"coin" : 0 ,
+				"mail" : "" ,
+				"phone" : "" ,
+				"qq" : "" ,
+				"xname" : "" ,		//学院名
+				"mname" : "" ,		//专业名
+				"status" : 0 ,		//状态
+				"unlktime" : "" ,	//status封禁时的解封时间 status正常为空
+				"mailtime" : "" ,	//未激活时显示邮件失效时间 status正常为空
+				"upcnt" : "" ,
+				"downcnt" : "" ,
+				"collectcnt" : "" ,
+				"registtime" : "" ,
+				"lastlogintime" : "" ,
+			}
+		]
+	}
+}
+{
+	"status" : 300 ,				//存在结果且页码超出结果数上界时返回
+	"message" : "Page Upperbound Overflow" ,
+}
+```
+
+#### Get File List
+
+> 后台视图用于文档详细信息 列表形式显示
+
+> 对于前端，提供一定的查询条件 不需要的条件置空
+
+> 全空为列举所有文档信息
+
+> 后端提供符合查询条件的文档的全部所需信息
+
+`Update 170915`
+
+url : `admin\file\list`
+
+method : `GET`
+
+request :
+```
+{
+	"fid" : 0 ,
+	"fname" : "" ,					//文件名 需支持模糊查询
+	"upuid" : "" ,					//上传者
+	"upnickname" : "" ,				//上传者昵称 需支持模糊查询
+	"xid" : 0 ,						//学院xid 前端利用Get College List接口
+	"mid" : 0 ,						//专业mid 前端利用Major Search接口
+	"cid" : 0 ,						//课程cid 前端利用Course Search接口
+	"status" : -1 ,					//提供特定状态文件查询
+	"origin" : -1 ,					//是否原创
+	"teacher" : 0 ,					//教师 需支持模糊查询 origin为1时无效
+	"low_downcnt" : 0 ,				//下载数 不少于的数值 eg.查下载数为4~7个的用户 "low_downcnt" = 4 包含边界4
+	"top_downcnt" : 0 ,				//下载数 不多于的数值 eg.查下载数为4~7个的用户 "top_downcnt" = 7 包含边界7
+	"low_collectcnt" : 0 ,			//收藏数
+	"top_collectcnt" : 0 ,
+	"low_uptime" : 0 ,				//上传时间 不早于的数值
+	"top_uptime" : 0 ,				//上传时间 不晚于的数值
+
+	"page" : 1 ,					//页码
+	"res_per_page" : 20 ,			//每页结果数 提供10 20 50 100四个选项
+	"sort_method" : "" ,			//排序依据
+	"sort_ref" : 1					//输出顺序 字符为按照字典序 1升序(1 2 3) 2降序(3 2 1)
+}
+```
+
+> 排序依据
+
+> fid&emsp;&emsp;fname&emsp;&emsp;upuid&emsp;&emsp;upusername&emsp;&emsp;nickname
+
+> mid(实际为xid与mid双关键字排序)&emsp;&emsp;cid&emsp;&emsp;status&emsp;&emsp;teacher&emsp;&emsp;dldcnt
+
+> colcnt&emsp;&emsp;uptime
+
+responce :
+```
+{
+	"status" : 200 ,
+	"message" : "OK" ,
+	"data" : 
+	{
+		"rescount" : 0 ,
+		[
+			"fid" : 0 ,
+			"fname" : "" ,
+			"upuid" : 0 ,
+			"upusername" : "" ,
+			"upnickname" : "" ,
+			"xname" : "" ,			//学院
+			"mname" : "" ,			//专业
+			"cname" : "" ,			//课程
+			"status" : 0 ,
+			"teacher" : "" ,
+			"dldcnt" : 0 ,
+			"colcnt" : 0 ,
+			"uptime" : "" ,
+			"origin" : 0 ,
+		]
+	}
+}
+{
+	"status" : 300 ,
+	"message" : "Page Upperbound Overflow" ,
+}
+```
+
+## Get User Log
+
+> 后台视图用于用户操作记录查询 列表形式显示
+
+> 对于前端，提供一定的查询条件 不需要的条件置空
+
+> 全空为列举所有记录信息
+
+> 后端提供符合查询条件的记录的全部所需信息
+
+`Update 170918`
+
+url : `admin\user\log`
+
+method : `GET`
+
+request :
+```
+{
+	"targetusername" : "" ,
+	"opusername" : "" ,
+	"optype" : "" ,					//操作
+	"low_optime" : "" ,				//操作时间
+	"top_optime" : "" ,
+	"low_endtime" : "" ,			//封禁结束时间
+	"top_endtime" : "" ,
+
+	"page" : 1 ,					//页码
+	"res_per_page" : 20 ,			//每页结果数 提供10 20 50 100四个选项
+	"sort_method" : "" ,			//排序依据
+	"sort_ref" : 1					//输出顺序 字符为按照字典序 1升序(1 2 3) 2降序(3 2 1)
+}
+```
+
+> 排序依据
+
+> opuid&emsp;&emsp;optargetuid&emsp;&emsp;optime&emsp;&emsp;opip&emsp;&emsp;endtime
+
+responce :
+```
+{
+	"status" : 200 ,
+	"message" : "OK" ,
+	"data" : 
+	{
+		"rescount" : 0 ,
+		[
+			"opusername" : "" ,
+			"targetusername" : "" ,
+			"optime" : "" ,
+			"opip" : "" ,
+			"type" : "" ,
+			"endtime" : "" .
+		]
+	}
+}
+{
+	"status" : 300 ,
+	"message" : "Page Upperbound Overflow" ,
+}
+
+```
+
+## Get File Log
+
+> 后台视图用于文件操作记录查询 列表形式显示
+
+> 对于前端，提供一定的查询条件 不需要的条件置空
+
+> 全空为列举所有记录信息
+
+> 后端提供符合查询条件的记录的全部所需信息
+
+`Update 170918`
+
+url : `admin\file\log`
+
+method : `GET`
+
+request :
+```
+{
+	"targetusername" : "" ,
+	"opusername" : "" ,
+	"optype" : "" ,					//操作
+	"low_optime" : "" ,				//操作时间
+	"top_optime" : "" ,
+
+	"page" : 1 ,					//页码
+	"res_per_page" : 20 ,			//每页结果数 提供10 20 50 100四个选项
+	"sort_method" : "" ,			//排序依据
+	"sort_ref" : 1					//输出顺序 字符为按照字典序 1升序(1 2 3) 2降序(3 2 1)
+}
+```
+
+> 排序依据
+
+> opuid&emsp;&emsp;optargetuid&emsp;&emsp;optime&emsp;&emsp;opip&emsp;&emsp;
+
+responce :
+```
+{
+	"status" : 200 ,
+	"message" : "OK" ,
+	"data" : 
+	{
+		"rescount" : 0 ,
+		[
+			"opusername" : "" ,		//后台注意在数据库加入opuid这一项
+			"targetusername" : "" ,
+			"optime" : "" ,
+			"opip" : "" ,
+			"type" : "" ,
+			"desc" : "" .
+		]
+	}
+}
+{
+	"status" : 300 ,
+	"message" : "Page Upperbound Overflow" ,
+}
+
+```
+
